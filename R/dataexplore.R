@@ -15,17 +15,30 @@ installpkgs <- function(pkgs){
 installpkgs(pkgs)
 lapply(pkgs, library, character.only = T)
 
+dataexplore <- function (cancerType, studyId, dataType) {
+  ## 1. connect the TCGA database and obtain the data
+  # create a CGDS connection objext
+  mycgds <- CGDS("http://www.cbioportal.org/")
+  # set verbose options to debug and troubleshoot issues
+  setVerbose(mycgds, TRUE)
+  # guarantee the unauthorized accessment
+  mysecurecgds <- CGDS("http://cbioportal.mskcc.org/",
+                       token = "fd0522cb-7972-40d0-9d83-cb4c14e8a337")
+  # get list of cancer studies at server for view to choose
+  cancerstudy <- getCancerStudies(mycgds)
+  
+  if(cancerType == "Breast Cancer"){
+    cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 1]
+    studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 2]
+  } else if(cancerType == "Pancreatic Cancer"){
+    cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 1]
+    studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 2]
+  } else if(cancerType == "Glioma"){
+    cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 1]
+    studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 2]
+  }
+}
 
-## 1. connect the TCGA database and obtain the data
-# create a CGDS connection objext
-mycgds <- CGDS("http://www.cbioportal.org/")
-# set verbose options to debug and troubleshoot issues
-setVerbose(mycgds, TRUE)
-# guarantee the unauthorized accessment
-mysecurecgds <- CGDS("http://cbioportal.mskcc.org/",
-                     token="fd0522cb-7972-40d0-9d83-cb4c14e8a337")
-# get list of cancer studies at server for view to choose
-cancerstudy <- getCancerStudies(mycgds)
 # get available case lists for a given cancer study
 mycancerstudy <- getCancerStudies(mycgds)[187, 1]
 mycaselist <- getCaseLists(mycgds, mycancerstudy)[6, 1]
