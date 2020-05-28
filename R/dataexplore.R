@@ -27,10 +27,10 @@ dataexplore <- function (cancerType, studyId, dataType) {
   # get list of cancer studies at server for view to choose
   cancerstudy <- getCancerStudies(mycgds)
   
-  if(cancerType == "Breast Cancer"){
+  if(cancerType == "BreastCancer"){
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 2]
-  } else if(cancerType == "Pancreatic Cancer"){
+  } else if(cancerType == "PancreaticCancer"){
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 2]
   } else if(cancerType == "Glioma"){
