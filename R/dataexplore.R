@@ -6,13 +6,13 @@ options(stringsAsFactors = FALSE)
 # load packages
 pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival", 
           "survminer", "readxl","ggstatsplot", "export")
-installpkgs <- function(pkgs){
-  new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
-  if (length(new.pkgs))
-   BiocManager::install(new.pkgs, ask = F, update = F)
-  sapply(pkgs, require, character.only = T)
-}
-installpkgs(pkgs)
+# installpkgs <- function(pkgs){
+#   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
+#   if (length(new.pkgs))
+#    BiocManager::install(new.pkgs, ask = F, update = F)
+#   sapply(pkgs, require, character.only = T)
+# }
+# installpkgs(pkgs)
 lapply(pkgs, library, character.only = T)
 
 dataexplore <- function (cancerType, studyId, dataType) {
@@ -26,20 +26,41 @@ dataexplore <- function (cancerType, studyId, dataType) {
                        token = "fd0522cb-7972-40d0-9d83-cb4c14e8a337")
   # get list of cancer studies at server for view to choose
   cancerstudy <- getCancerStudies(mycgds)
-  
   if(cancerType == "BreastCancer"){
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "brca"))), 2]
-  } else if(cancerType == "PancreaticCancer"){
+  } else if (cancerType == "PancreaticCancer") {
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "paad"))), 2]
-  } else if(cancerType == "Glioma"){
+  } else if (cancerType == "Glioma") {
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 2]
   }
 }
 
 # get available case lists for a given cancer study
+if(is.na(studyId)){
+  MainstrId <- cbind(cancerid, studydoi)
+  print.table(studydoi, right = F, justify = "centre")
+  if(interactive()){
+    repeat{
+      ANSWER <- readline("Please input the dataset number: ")
+      num <- as.numeric(ANSWER)
+      if(is.na(num) || num <= 0 || num > length(studydoi)){
+        print("Please type right number format!")
+      } else if (num > 0 && num <= length(studydoi)) {
+        break
+      }
+    }
+  }
+  MainstrDat <- cancerid[num]
+  mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
+  mycaselist <- getCaseLists(mycgds, MainstrDat)
+  Mainstr$mrnanum  <- grep("mrna", mycaselist[ , 1])
+  mygeneticprofile <- getGeneticProfiles(mycgds, Mainstr$dataset)
+  Mainstr$mrnaNum  <- grep("mrna", mygeneticprofile[ , 1])[1]
+}
+
 mycancerstudy <- getCancerStudies(mycgds)[187, 1]
 mycaselist <- getCaseLists(mycgds, mycancerstudy)[6, 1]
 # get available genetic profiles
