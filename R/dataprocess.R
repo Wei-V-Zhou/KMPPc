@@ -4,8 +4,7 @@ gc()
 graphics.off()
 options(stringsAsFactors = FALSE)
 # load packages
-pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival", 
-          "survminer", "readxl","ggstatsplot", "export")
+pkgs <- c("ggplot2", "stringr", "ggpubr", "ggstatsplot", "export")
 # installpkgs <- function(pkgs){
 #   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
 #   if (length(new.pkgs))
