@@ -36,29 +36,29 @@ dataexplore <- function (cancerType, studyId, dataType) {
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 2]
   }
-}
-
-# get available case lists for a given cancer study
-if(is.null(studyId)){
-  MainstrId <- cbind(cancerid, studydoi)
-  print.table(studydoi, right = F, justify = "centre")
-  if(interactive()){
-    repeat{
-      ANSWER <- readline("Please input the dataset number: ")
-      num <- as.numeric(ANSWER)
-      if(is.na(num) || num <= 0 || num > length(studydoi)){
-        print("Please type right number format!")
-      } else if (num > 0 && num <= length(studydoi)) {
-        break
+  # get available case lists for a given cancer study
+  if(is.null(studyId)){
+    MainstrId <- cbind(cancerid, studydoi)
+    print.table(studydoi, right = F, justify = "centre")
+    if(interactive()){
+      repeat{
+        ANSWER <- readline("Please input the dataset number: ")
+        num <- as.numeric(ANSWER)
+        if(is.na(num) || num <= 0 || num > length(studydoi)){
+          print("Please type right number format!")
+        } else if (num > 0 && num <= length(studydoi)) {
+          break
+        }
       }
     }
+    MainstrDat <- cancerid[num]
+  } else if (is.numeric(studyId)) {
+    MainstrDat <- cancerid[as.numeric(studyId)]
+  } else {
+    stop("Please input right format studyId!")
   }
-  MainstrDat <- cancerid[num]
-} else if (is.numeric(studyId)) {
-  MainstrDat <- cancerid[as.numeric(studyId)]
-} else {
-  print("Please input right format studyId!")
 }
+
 
 mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
 mycaselist <- getCaseLists(mycgds, MainstrDat)
