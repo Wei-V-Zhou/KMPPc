@@ -204,44 +204,6 @@ dataexplore <- function (cancerType, studyId, dataType) {
 }
 
 
-## 2. data preproceeding
-rm(list = ls())
-gc()
-options(stringsAsFactors = F)
-# load data
-load("survival_inputdata.Rdata")
-# view the clinical data
-clinicaldata_view <- as.matrix(colnames(myclinicaldata))
-# read the clinical information
-choose_columns = c("DFS_MONTHS", "DFS_STATUS")
-choose_clinicaldata = myclinicaldata[ , choose_columns]
-dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata$DFS_MONTHS), ]
-dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
-colnames(dat2)[3] <- "JAG2"
-write.csv(dat2, "JAG2_TCGA_expr_pancreas1.csv")
-# expressed genes plot
-p <- ggboxplot(dat2, x="DFS_STATUS", y="JAG2", color="DFS_STATUS", palette="jco", add="jitter")
-p + stat_compare_means(method = "t.test")
-dat2$JAG2_group = ifelse(dat2$JAG2 > median(dat2$JAG2), 'high', 'low')
-# dat2$JAG2_group = ifelse(dat2$JAG2 > quantile(dat2$JAG2)[4], 'high', 'low')
-ggbetweenstats(data = dat2, x = JAG2_group, y = JAG2)
-
-
-## 3. K-M plot analysis
-# survival plot
-attach(dat2)
-{
-  table(JAG2_group)
-  my.surv <- Surv(DFS_MONTHS, DFS_STATUS == 'Recurred/Progressed')
-  kmfit <- survfit(my.surv~JAG2_group, data = dat2)
-  plot(kmfit, col = c("red", "blue"))
-  ggsurvplot(kmfit, palette=c("#E7B800","#2E9FDF"),
-             conf.int = TRUE, pval = TRUE, xlab = "Time / Month",
-             ggtheme = theme_light(), risk.table = TRUE, ncensor.plot = TRUE)
-}
-detach(dat2)
-
-
 sessionInfo()
 # R version 3.6.2 (2019-12-12)
 # Platform: x86_64-w64-mingw32/x64 (64-bit)
