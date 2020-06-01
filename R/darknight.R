@@ -8,11 +8,13 @@ if (!requireNamespace("cBioPortalData", quietly = TRUE))
 # }
 
 library("cBioPortalData")
+library("rapiclient")
+
 cbio <- cBioPortal()
+client <- get_api(url = "https://pedcbioportal.kidsfirstdrc.org")
 
-gbm <- cBioPortalData(api = cbio, by = "hugoGeneSymbol", studyId = "gbm_tcga",
-                      genePanelId = "IMPACT341",
-                      molecularProfileIds = c("gbm_tcga_rppa", "gbm_tcga_mrna")
-)
+dipg <- cBioPortalData(api = cbio, by = "hugoGeneSymbol", studyId = "dipg",
+                      genePanelId = "IMPACT341")
 
-laml <- cBioDataPack("laml_tcga")
+
+dipg <- cBioDataPack("dipg_cbttc")
