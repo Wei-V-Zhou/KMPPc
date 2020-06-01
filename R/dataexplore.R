@@ -36,6 +36,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
     cancerid <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 1]
     studydoi <- cancerstudy[which(!is.na(str_extract(cancerstudy[ , 1], "glioma|lgg"))), 2]
   }
+  
   # get available case lists for a given cancer study
   if(is.null(studyId)){
     MainstrId <- cbind(cancerid, studydoi)
@@ -47,7 +48,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
         if(is.na(num) || num <= 0 || num > length(studydoi)){
           print("Please type right number format!")
         } else if (num > 0 && num <= length(studydoi)) {
-          break
+          break;
         }
       }
     }
@@ -57,18 +58,145 @@ dataexplore <- function (cancerType, studyId, dataType) {
   } else {
     stop("Please input right format studyId!")
   }
+  
+  # get available genetic profiles
+  mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
+  if (dataType == "mrna") {
+    # mrna data
+    mrnaFile <- grep("mrna", mygeneticprofile[ , 1])
+    print.table(mygeneticprofile[mrnaFile, 3], right = F, justify = "left")
+    repeat{
+      ANSWER <- readline("Please input your interested genetic file number: ")
+      mrnaNum <- as.numeric(ANSWER)
+      if (is.na(mrnaNum) || mrnaNum <= 0 || mrnaNum > length(mrnaFile)) {
+        print("Please type right number format!")
+      } else if (mrnaNum > 0 && mrnaNum <= length(mrnaFile)) {
+        break;
+      }
+    }
+    dataTypeFile = mrnaFile[mrnaNum]
+  } else if (dataType == "methylation") {
+    # methylation data
+    methylationFile  <- grep("methylation", mygeneticprofile[ , 1])
+    print.table(mygeneticprofile[methylationFile, 3], right = F, justify = "left")
+    repeat{
+      ANSWER <- readline("Please input your interested genetic file number: ")
+      methylationNum <- as.numeric(ANSWER)
+      if (is.na(methylationNum) || methylationNum <= 0 || methylationNum > length(methylationFile)) {
+        print("Please type right number format!")
+      } else if (methylationNum > 0 && methylationNum <= length(methylationFile)) {
+        break;
+      }
+    }
+    dataTypeFile = methylationFile[methylationNum]
+  } else if (dataType == "CNA") {
+    # CNA data
+    cnaFile  <- grep("CNA", mygeneticprofile[ , 1])
+    print.table(mygeneticprofile[cnaFile, 3], right = F, justify = "left")
+    repeat{
+      ANSWER <- readline("Please input your interested genetic file number: ")
+      cnaNum <- as.numeric(ANSWER)
+      if (is.na(cnaNum) || cnaNum <= 0 || cnaNum > length(cnaFile)) {
+        print("Please type right number format!")
+      } else if (cnaNum > 0 && cnaNum <= length(cnaFile)) {
+        break;
+      }
+    }
+    dataTypeFile = cnaFile[cnaNum]
+  } else if (dataType == "mutation") {
+    # mutation
+    mutationFile <- grep("mutation", mygeneticprofile[ , 1])
+    print.table(mygeneticprofile[mutationFile, 3], right = F, justify = "left")
+    repeat{
+      ANSWER <- readline("Please input your interested number: ")
+      mutationNum <- as.numeric(ANSWER)
+      if (is.na(mutationNum) || mutationNum <= 0 || mutationNum > length(mutationFile)) {
+        print("Please type right number format!")
+      } else if (mutationNum > 0 && mutationNum <= length(mutationFile)) {
+        break;
+      }
+    }
+    dataTypeFile = mutationFile[mutationNum]
+  } else {
+    stop("Please input right format dataType!")
+  }
+  geneticFile <- getGeneticProfiles(mycgds, MainstrDat)[dataTypeFile, 1]
+  
+  # get available genecase list
+  mycaselist <- getCaseLists(mycgds, MainstrDat)
+  if (dataType == "mrna") {
+    # mRNA data
+    mrnaList  <- grep("mrna", mycaselist[ , 1])
+    print.table(mycaselist[mrnaList, 3], right = F, justify = "centre")
+    repeat{
+      ANSWER <- readline("Please input your interested case list number: ")
+      mrnaNum <- as.numeric(ANSWER)
+      if (is.na(mrnaNum) || mrnaNum <= 0 || mrnaNum > length(mrnaList)) {
+        print("Please type right number format!")
+      } else if (mrnaNum > 0 && mrnaNum <= length(mrnaList)) {
+        break;
+      } 
+    }
+    dataTypeList = mrnaList[mrnaNum]
+  } else if (dataType == "methylation") {
+    # methylation data
+    methylationList  <- grep("methylation", mycaselist[ , 1])
+    print.table(mycaselist[methylationList, 3], right = F, justify = "centre")
+    repeat{
+      ANSWER <- readline("Please input your interested number: ")
+      methylationNum <- as.numeric(ANSWER)
+      if (is.na(methylationNum) || methylationNum <= 0 || methylationNum > length(methylationList)) {
+        print("Please type right number format!")
+      } else if (methylationNum > 0 && methylationNum <= length(methylationList)) {
+        break;
+      }
+    }
+    dataTypeList = methylationList[methylationNum]
+  } else if (dataType == "CNA") {
+    # CNA data
+    cnaList  <- grep("CNA", mycaselist[ , 2])
+    print.table(mycaselist[cnaList, 3], right = F, justify = "centre")
+    repeat{
+      ANSWER <- readline("Please input your interested number: ")
+      cnaNum <- as.numeric(ANSWER)
+      if (is.na(cnaNum) || cnaNum <= 0 || cnaNum > length(cnaList)) {
+        print("Please type right number format!")
+      } else if (cnaNum > 0 && cnaNum <= length(cnaList)) {
+        break;
+      }
+    }
+    dataTypeList = cnaList[cnaNum]
+  } else if (dataType == "mutation") {
+    # mutation
+    mutationList <- grep("mutation", mycaselist[ , 2])
+    print.table(mycaselist[mutationList, 3], right = F, justify = "centre")
+    repeat{
+      ANSWER <- readline("Please input your interested number: ")
+      mutationNum <- as.numeric(ANSWER)
+      if (is.na(mutationNum) || mutationNum <= 0 || mutationNum > length(mutationList)) {
+        print("Please type right number format!")
+      } else if (mutationNum > 0 && mutationNum <= length(mutationList)) {
+        break;
+      }
+    }
+    dataTypeList = mutationList[mutationNum]
+  } else {
+    stop("Please input right format dataType!")
+  }
+  caseList <- getCaseLists(mycgds, MainstrDat)[dataTypeList, 1]
+  
+  # get data slices for a specified list of genes, genetic profiles and case list
+  choose_genes <- c("JAG2")
+  exprSet = getProfileData(mycgds, choose_genes, mygeneticprofile, mycaselist)
+  
 }
 
 
-mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
-mycaselist <- getCaseLists(mycgds, MainstrDat)
-Mainstr$mrnanum  <- grep("mrna", mycaselist[ , 1])
+ANSWER <- readline("Please input your interested number: ")
+num <- as.numeric(ANSWER)
 mygeneticprofile <- getGeneticProfiles(mycgds, Mainstr$dataset)
 Mainstr$mrnaNum  <- grep("mrna", mygeneticprofile[ , 1])[1]
-mycancerstudy <- getCancerStudies(mycgds)[187, 1]
-mycaselist <- getCaseLists(mycgds, mycancerstudy)[6, 1]
-# get available genetic profiles
-mygeneticprofile <- getGeneticProfiles(mycgds, mycancerstudy)[4, 1]
+
 # get data slices for a specified list of genes, genetic profiles and case list
 choose_genes <- c("JAG2")
 exprSet = getProfileData(mycgds, choose_genes, mygeneticprofile, mycaselist)
