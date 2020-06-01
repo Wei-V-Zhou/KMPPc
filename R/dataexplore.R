@@ -1,21 +1,23 @@
-## 0. prepare environment and load libraries
-rm(list = ls())
-gc()
-graphics.off()
-options(stringsAsFactors = FALSE)
-# load packages
-pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival", 
-          "survminer", "readxl","ggstatsplot", "export")
-# installpkgs <- function(pkgs){
-#   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
-#   if (length(new.pkgs))
-#    BiocManager::install(new.pkgs, ask = F, update = F)
-#   sapply(pkgs, require, character.only = T)
-# }
-# installpkgs(pkgs)
-lapply(pkgs, library, character.only = T)
 
 dataexplore <- function (cancerType, studyId, dataType) {
+  
+  ## 0. prepare environment and load libraries
+  rm(list = ls())
+  gc()
+  graphics.off()
+  options(stringsAsFactors = FALSE)
+  # load packages
+  pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival", 
+            "survminer", "readxl","ggstatsplot", "export")
+  # installpkgs <- function(pkgs){
+  #   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
+  #   if (length(new.pkgs))
+  #    BiocManager::install(new.pkgs, ask = F, update = F)
+  #   sapply(pkgs, require, character.only = T)
+  # }
+  # installpkgs(pkgs)
+  lapply(pkgs, library, character.only = T)
+  
   ## 1. connect the TCGA database and obtain the data
   # create a CGDS connection objext
   mycgds <- CGDS("http://www.cbioportal.org/")
