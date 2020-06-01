@@ -39,7 +39,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
 }
 
 # get available case lists for a given cancer study
-if(is.na(studyId)){
+if(is.null(studyId)){
   MainstrId <- cbind(cancerid, studydoi)
   print.table(studydoi, right = F, justify = "centre")
   if(interactive()){
@@ -54,13 +54,17 @@ if(is.na(studyId)){
     }
   }
   MainstrDat <- cancerid[num]
-  mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
-  mycaselist <- getCaseLists(mycgds, MainstrDat)
-  Mainstr$mrnanum  <- grep("mrna", mycaselist[ , 1])
-  mygeneticprofile <- getGeneticProfiles(mycgds, Mainstr$dataset)
-  Mainstr$mrnaNum  <- grep("mrna", mygeneticprofile[ , 1])[1]
+} else if (is.numeric(studyId)) {
+  MainstrDat <- cancerid[as.numeric(studyId)]
+} else {
+  print("Please input right format studyId!")
 }
 
+mygeneticprofile <- getGeneticProfiles(mycgds, MainstrDat)
+mycaselist <- getCaseLists(mycgds, MainstrDat)
+Mainstr$mrnanum  <- grep("mrna", mycaselist[ , 1])
+mygeneticprofile <- getGeneticProfiles(mycgds, Mainstr$dataset)
+Mainstr$mrnaNum  <- grep("mrna", mygeneticprofile[ , 1])[1]
 mycancerstudy <- getCancerStudies(mycgds)[187, 1]
 mycaselist <- getCaseLists(mycgds, mycancerstudy)[6, 1]
 # get available genetic profiles
