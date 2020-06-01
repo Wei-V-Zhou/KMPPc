@@ -143,7 +143,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
     methylationList  <- grep("methylation", mycaselist[ , 1])
     print.table(mycaselist[methylationList, 3], right = F, justify = "centre")
     repeat{
-      ANSWER <- readline("Please input your interested number: ")
+      ANSWER <- readline("Please input your interested case list number: ")
       methylationNum <- as.numeric(ANSWER)
       if (is.na(methylationNum) || methylationNum <= 0 || methylationNum > length(methylationList)) {
         print("Please type right number format!")
@@ -157,7 +157,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
     cnaList  <- grep("CNA", mycaselist[ , 2])
     print.table(mycaselist[cnaList, 3], right = F, justify = "centre")
     repeat{
-      ANSWER <- readline("Please input your interested number: ")
+      ANSWER <- readline("Please input your interested case list number: ")
       cnaNum <- as.numeric(ANSWER)
       if (is.na(cnaNum) || cnaNum <= 0 || cnaNum > length(cnaList)) {
         print("Please type right number format!")
@@ -171,7 +171,7 @@ dataexplore <- function (cancerType, studyId, dataType) {
     mutationList <- grep("mutation", mycaselist[ , 2])
     print.table(mycaselist[mutationList, 3], right = F, justify = "centre")
     repeat{
-      ANSWER <- readline("Please input your interested number: ")
+      ANSWER <- readline("Please input your interested case list number: ")
       mutationNum <- as.numeric(ANSWER)
       if (is.na(mutationNum) || mutationNum <= 0 || mutationNum > length(mutationList)) {
         print("Please type right number format!")
@@ -186,24 +186,22 @@ dataexplore <- function (cancerType, studyId, dataType) {
   caseList <- getCaseLists(mycgds, MainstrDat)[dataTypeList, 1]
   
   # get data slices for a specified list of genes, genetic profiles and case list
-  choose_genes <- c("JAG2")
-  exprSet = getProfileData(mycgds, choose_genes, mygeneticprofile, mycaselist)
+  repeat{
+    ANSWER <- readline("Please input your interested gene name: ")
+    geneName <- toupper(ANSWER)
+    if (geneName == "") {
+      print("Please type right number format!")
+    } else {
+      break;
+    }
+  }
+  exprSet = getProfileData(mycgds, geneName, geneticFile, caseList)
   
+  # get clinical data for the case list
+  myclinicaldata <- getClinicalData(mycgds, caseList)
+  # save the data
+  save(exprSet, myclinicaldata, file="survival_inputdata.Rdata")
 }
-
-
-ANSWER <- readline("Please input your interested number: ")
-num <- as.numeric(ANSWER)
-mygeneticprofile <- getGeneticProfiles(mycgds, Mainstr$dataset)
-Mainstr$mrnaNum  <- grep("mrna", mygeneticprofile[ , 1])[1]
-
-# get data slices for a specified list of genes, genetic profiles and case list
-choose_genes <- c("JAG2")
-exprSet = getProfileData(mycgds, choose_genes, mygeneticprofile, mycaselist)
-# get clinical data for the case list
-myclinicaldata <- getClinicalData(mycgds, mycaselist)
-# save the data
-save(exprSet, myclinicaldata, file="survival_inputdata.Rdata")
 
 
 ## 2. data preproceeding
