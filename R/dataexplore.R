@@ -1,9 +1,10 @@
 
-dataexplore <- function (cancerType, studyId, dataType) {
+dataexplore <- function(cancerType, studyId = NULL, dataType = NULL) {
   
   ## 0. prepare environment and load libraries
-  rm(list = ls())
-  gc()
+  # rm(list = ls())
+  # gc()
+  set.seed(12345)
   graphics.off()
   options(stringsAsFactors = FALSE)
   # load packages
