@@ -1,5 +1,5 @@
 
-dataprocess <- function(){
+dataprocess <- function(x_axis, y_axis){
   
   ## 0. prepare environment and load libraries
   # rm(list = ls())
@@ -19,13 +19,20 @@ dataprocess <- function(){
   lapply(pkgs, library, character.only = T)
   
   ## 2. data preproceeding
-  rm(list = ls())
-  gc()
-  options(stringsAsFactors = F)
   # load data
   load("survival_inputdata.Rdata")
   # view the clinical data
   clinicaldata_view <- as.matrix(colnames(myclinicaldata))
+  choose_columns <- c(clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "DFS_MONTHS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "DFS_STATUS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "DSS_MONTHS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "DSS_STATUS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "OS_MONTHS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "OS_STATUS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_MONTHS")))],
+                      clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_STATUS")))])
+  cat("This clinical dataset only has the following data: \n***Notation: x_axis presents time, y_axis presents status; please choose the corresponding data!")
+  print.table(choose_columns, right = F, justify = "centre")
   # read the clinical information
   choose_columns = c("DFS_MONTHS", "DFS_STATUS")
   choose_clinicaldata = myclinicaldata[ , choose_columns]
