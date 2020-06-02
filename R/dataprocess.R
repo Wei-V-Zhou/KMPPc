@@ -24,7 +24,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
     load("survival_inputdata.Rdata")
   } else {
     print("Please guarantee your two files are choose_clinicaldata and exprSet, respectively!")
-    cat("***Notation: Or you will load the survival_inputdata.RData on your own!")
+    cat("***Notation: Or you will load the survival_inputdata.Rdata on your own!")
   }
   
   # view the clinical data
