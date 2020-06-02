@@ -1,5 +1,5 @@
 
-dataprocess <- function(x_axis, y_axis){
+dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_axis = NULL) {
   
   ## 0. prepare environment and load libraries
   # rm(list = ls())
@@ -20,7 +20,12 @@ dataprocess <- function(x_axis, y_axis){
   
   ## 2. data preproceeding
   # load data
-  load("survival_inputdata.Rdata")
+  if (is.null(clinicaldata) || is.null(exprSet)) {
+    load("survival_inputdata.Rdata")
+  } else {
+    print("Please guarantee your two files are choose_clinicaldata and exprSet, respectively!")
+    cat("***Notation: Or you will load the survival_inputdata.RData on your own!")
+  }
   
   # view the clinical data
   clinicaldata_view <- as.matrix(colnames(myclinicaldata))
@@ -39,34 +44,52 @@ dataprocess <- function(x_axis, y_axis){
   
   # read the clinical information
   # choose x_axis
-  if(interactive()){
-    repeat{
-      ANSWER <- readline("Please input the x_axis number (time): ")
-      num <- as.numeric(ANSWER)
-      if(is.na(num) || num <= 0 || num > length(choose_columns)){
-        print("Please type right number format!")
-      } else if (num > 0 && num <= length(choose_columns)) {
-        break;
-      }
-    }
-    x_axis <- choose_columns[num]
-  }
-  # choose y_axis
-  if(interactive()){
-    repeat{
-      ANSWER <- readline("Please input the y_axis number (status): ")
-      num <- as.numeric(ANSWER)
-      if(is.na(num) || num <= 0 || num > length(choose_columns)){
-        print("Please type right number format!")
-      } else if (num > 0 && num <= length(choose_columns)) {
-        if (x_axis != choose_columns[num]) {
+  if (is.null(x_axis)) {
+    if(interactive()){
+      repeat{
+        ANSWER <- readline("Please input the x_axis number (time): ")
+        num <- as.numeric(ANSWER)
+        if(is.na(num) || num <= 0 || num > length(choose_columns)){
+          print("Please type right number format!")
+        } else if (num > 0 && num <= length(choose_columns)) {
           break;
-        } else {
-          print("y_axis can't be the same with x_axis!")
         }
       }
+      x_axis <- choose_columns[num]
     }
-    y_axis <- choose_columns[num]
+  } else {
+    if (! x_axis %in% choose_columns) {
+      cat("Sorry! The input of x_axis is not in the clinical dataset!\n***Please type right format!")
+      x_axis = NULL
+      stop("Or you can eliminate x_axis and follow the tips.")
+    }
+  }
+  # choose y_axis
+  if (is.null(y_axis)) {
+    if(interactive()){
+      repeat{
+        ANSWER <- readline("Please input the y_axis number (status): ")
+        num <- as.numeric(ANSWER)
+        if(is.na(num) || num <= 0 || num > length(choose_columns)){
+          print("Please type right number format!")
+        } else if (num > 0 && num <= length(choose_columns)) {
+          if (x_axis != choose_columns[num]) {
+            break;
+          } else {
+            print("y_axis can't be the same with x_axis!")
+          }
+        }
+      }
+      y_axis <- choose_columns[num]
+    }
+  } else if (x_axis == y_axis) {
+    stop("x_axis can't be the same with y_axis!")
+  } else {
+    if (! y_axis %in% choose_columns) {
+      cat("Sorry! The input of y_axis is not in the clinical dataset!\n***Please type right format!")
+      x_axis = NULL
+      stop("Or you can eliminate y_axis and follow the tips.")
+    }
   }
   
   # filter the data
@@ -74,14 +97,15 @@ dataprocess <- function(x_axis, y_axis){
   choose_clinicaldata = myclinicaldata[ , choose_column]
   dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata[ , 1]), ]
   dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
-  colnames(dat2)[3] <- names(exprSet)
+  geneName <- names(exprSet)
+  colnames(dat2)[3] <- geneName
   if(interactive()){
     repeat{
       ANSWER <- readline("Save the clinical data and related exprset data[y/n]: ")
       num <- trimws(tolower(ANSWER), which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
       if (num == "y" || num == "yes") {
         print("Save successfully!")
-        filename = paste0(names(exprSet), "_clinical_expr_data_", Sys.Date(), ".csv")
+        filename = paste0(geneName, "_clinical_expr_data_", Sys.Date(), ".csv")
         write.csv(dat2, file = filename)
         break;
       } else if (num == "n" || num == "no") {
@@ -93,29 +117,14 @@ dataprocess <- function(x_axis, y_axis){
   }
   
   # expressed genes plot
-  p <- ggboxplot(dat2, x = y_axis, y = names(exprSet), color = y_axis, palette = "jco", add = "jitter")
+  p <- ggboxplot(dat2, x = y_axis, y = geneName, color = y_axis, palette = "jco", add = "jitter")
   p + stat_compare_means(method = "t.test")
-  dat2$JAG2_group = ifelse(dat2$JAG2 > median(dat2$JAG2), 'high', 'low')
-  # dat2$JAG2_group = ifelse(dat2$JAG2 > quantile(dat2$JAG2)[4], 'high', 'low')
-  ggbetweenstats(data = dat2, x = JAG2_group, y = JAG2)
-  
+  group <- paste0(geneName, "_group")
+  dat2$group = ifelse(dat2[ , geneName] > median(dat2[ , names(exprSet)]), 'high', 'low')
+  # dat2$group = ifelse(dat2[ , names(exprSet)] > quantile(dat2[ , names(exprSet)])[4], 'high', 'low')
+  dat2$geneName = dat2$HTRA1
+  ggbetweenstats(data = dat2, x = group, y = geneName, xlab = "Patient group", ylab = paste0(geneName, "_expression"))
 }
-
-
-## 3. K-M plot analysis
-# survival plot
-attach(dat2)
-{
-  table(JAG2_group)
-  my.surv <- Surv(DFS_MONTHS, DFS_STATUS == 'Recurred/Progressed')
-  kmfit <- survfit(my.surv~JAG2_group, data = dat2)
-  plot(kmfit, col = c("red", "blue"))
-  ggsurvplot(kmfit, palette=c("#E7B800","#2E9FDF"),
-             conf.int = TRUE, pval = TRUE, xlab = "Time / Month",
-             ggtheme = theme_light(), risk.table = TRUE, ncensor.plot = TRUE)
-}
-detach(dat2)
-
 
 sessionInfo()
 # R version 3.6.2 (2019-12-12)
