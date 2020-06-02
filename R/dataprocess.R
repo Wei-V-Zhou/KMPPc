@@ -18,32 +18,29 @@ dataprocess <- function(){
   # installpkgs(pkgs)
   lapply(pkgs, library, character.only = T)
   
-  
+  ## 2. data preproceeding
+  rm(list = ls())
+  gc()
+  options(stringsAsFactors = F)
+  # load data
+  load("survival_inputdata.Rdata")
+  # view the clinical data
+  clinicaldata_view <- as.matrix(colnames(myclinicaldata))
+  # read the clinical information
+  choose_columns = c("DFS_MONTHS", "DFS_STATUS")
+  choose_clinicaldata = myclinicaldata[ , choose_columns]
+  dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata$DFS_MONTHS), ]
+  dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
+  colnames(dat2)[3] <- "JAG2"
+  write.csv(dat2, "JAG2_TCGA_expr_pancreas1.csv")
+  # expressed genes plot
+  p <- ggboxplot(dat2, x="DFS_STATUS", y="JAG2", color="DFS_STATUS", palette="jco", add="jitter")
+  p + stat_compare_means(method = "t.test")
+  dat2$JAG2_group = ifelse(dat2$JAG2 > median(dat2$JAG2), 'high', 'low')
+  # dat2$JAG2_group = ifelse(dat2$JAG2 > quantile(dat2$JAG2)[4], 'high', 'low')
+  ggbetweenstats(data = dat2, x = JAG2_group, y = JAG2)
   
 }
-
-
-## 2. data preproceeding
-rm(list = ls())
-gc()
-options(stringsAsFactors = F)
-# load data
-load("survival_inputdata.Rdata")
-# view the clinical data
-clinicaldata_view <- as.matrix(colnames(myclinicaldata))
-# read the clinical information
-choose_columns = c("DFS_MONTHS", "DFS_STATUS")
-choose_clinicaldata = myclinicaldata[ , choose_columns]
-dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata$DFS_MONTHS), ]
-dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
-colnames(dat2)[3] <- "JAG2"
-write.csv(dat2, "JAG2_TCGA_expr_pancreas1.csv")
-# expressed genes plot
-p <- ggboxplot(dat2, x="DFS_STATUS", y="JAG2", color="DFS_STATUS", palette="jco", add="jitter")
-p + stat_compare_means(method = "t.test")
-dat2$JAG2_group = ifelse(dat2$JAG2 > median(dat2$JAG2), 'high', 'low')
-# dat2$JAG2_group = ifelse(dat2$JAG2 > quantile(dat2$JAG2)[4], 'high', 'low')
-ggbetweenstats(data = dat2, x = JAG2_group, y = JAG2)
 
 
 ## 3. K-M plot analysis
