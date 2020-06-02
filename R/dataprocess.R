@@ -21,6 +21,7 @@ dataprocess <- function(x_axis, y_axis){
   ## 2. data preproceeding
   # load data
   load("survival_inputdata.Rdata")
+  
   # view the clinical data
   clinicaldata_view <- as.matrix(colnames(myclinicaldata))
   choose_columns <- c(clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "DFS_MONTHS")))],
@@ -32,16 +33,67 @@ dataprocess <- function(x_axis, y_axis){
                       clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_MONTHS")))],
                       clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_STATUS")))])
   cat("This clinical dataset only has the following data: \n***Notation: x_axis presents time, y_axis presents status; please choose the corresponding data!")
-  print.table(choose_columns, right = F, justify = "centre")
+  for (i in 1:length(choose_columns)) {
+    cat(c(i, ": ", choose_columns[i], "\n"))
+  }
+  
   # read the clinical information
-  choose_columns = c("DFS_MONTHS", "DFS_STATUS")
-  choose_clinicaldata = myclinicaldata[ , choose_columns]
-  dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata$DFS_MONTHS), ]
+  # choose x_axis
+  if(interactive()){
+    repeat{
+      ANSWER <- readline("Please input the x_axis number (time): ")
+      num <- as.numeric(ANSWER)
+      if(is.na(num) || num <= 0 || num > length(choose_columns)){
+        print("Please type right number format!")
+      } else if (num > 0 && num <= length(choose_columns)) {
+        break;
+      }
+    }
+    x_axis <- choose_columns[num]
+  }
+  # choose y_axis
+  if(interactive()){
+    repeat{
+      ANSWER <- readline("Please input the y_axis number (status): ")
+      num <- as.numeric(ANSWER)
+      if(is.na(num) || num <= 0 || num > length(choose_columns)){
+        print("Please type right number format!")
+      } else if (num > 0 && num <= length(choose_columns)) {
+        if (x_axis != choose_columns[num]) {
+          break;
+        } else {
+          print("y_axis can't be the same with x_axis!")
+        }
+      }
+    }
+    y_axis <- choose_columns[num]
+  }
+  
+  # filter the data
+  choose_column = c(x_axis, y_axis)
+  choose_clinicaldata = myclinicaldata[ , choose_column]
+  dat1 <- choose_clinicaldata[!is.na(choose_clinicaldata[ , 1]), ]
   dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
-  colnames(dat2)[3] <- "JAG2"
-  write.csv(dat2, "JAG2_TCGA_expr_pancreas1.csv")
+  colnames(dat2)[3] <- names(exprSet)
+  if(interactive()){
+    repeat{
+      ANSWER <- readline("Save the clinical data and related exprset data[y/n]: ")
+      num <- trimws(tolower(ANSWER), which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
+      if (num == "y" || num == "yes") {
+        print("Save successfully!")
+        filename = paste0(names(exprSet), "_clinical_expr_data_", Sys.Date(), ".csv")
+        write.csv(dat2, file = filename)
+        break;
+      } else if (num == "n" || num == "no") {
+        break;
+      } else {
+        print("Wrong format! Please type y or n!")
+      }
+    }
+  }
+  
   # expressed genes plot
-  p <- ggboxplot(dat2, x="DFS_STATUS", y="JAG2", color="DFS_STATUS", palette="jco", add="jitter")
+  p <- ggboxplot(dat2, x = y_axis, y = names(exprSet), color = y_axis, palette = "jco", add = "jitter")
   p + stat_compare_means(method = "t.test")
   dat2$JAG2_group = ifelse(dat2$JAG2 > median(dat2$JAG2), 'high', 'low')
   # dat2$JAG2_group = ifelse(dat2$JAG2 > quantile(dat2$JAG2)[4], 'high', 'low')
