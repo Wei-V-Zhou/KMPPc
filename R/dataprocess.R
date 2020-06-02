@@ -1,18 +1,27 @@
-## 0. prepare environment and load libraries
-rm(list = ls())
-gc()
-graphics.off()
-options(stringsAsFactors = FALSE)
-# load packages
-pkgs <- c("ggplot2", "stringr", "ggpubr", "ggstatsplot", "export")
-# installpkgs <- function(pkgs){
-#   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
-#   if (length(new.pkgs))
-#    BiocManager::install(new.pkgs, ask = F, update = F)
-#   sapply(pkgs, require, character.only = T)
-# }
-# installpkgs(pkgs)
-lapply(pkgs, library, character.only = T)
+
+dataprocess <- function(){
+  
+  ## 0. prepare environment and load libraries
+  # rm(list = ls())
+  # gc()
+  set.seed(12345)
+  graphics.off()
+  options(stringsAsFactors = FALSE)
+  # load packages
+  pkgs <- c("ggplot2", "stringr", "ggpubr", "ggstatsplot", "export")
+  # installpkgs <- function(pkgs){
+  #   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
+  #   if (length(new.pkgs))
+  #    BiocManager::install(new.pkgs, ask = F, update = F)
+  #   sapply(pkgs, require, character.only = T)
+  # }
+  # installpkgs(pkgs)
+  lapply(pkgs, library, character.only = T)
+  
+  
+  
+}
+
 
 ## 2. data preproceeding
 rm(list = ls())
