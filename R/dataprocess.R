@@ -37,7 +37,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
                       clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "OS_STATUS")))],
                       clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_MONTHS")))],
                       clinicaldata_view[which(!is.na(str_extract(clinicaldata_view, "PFS_STATUS")))])
-  cat("This clinical dataset only has the following data: \n***Notation: x_axis presents time, y_axis presents status; please choose the corresponding data!")
+  cat("This clinical dataset only has the following data: \n***Notation: x_axis presents time, y_axis presents status; please choose the corresponding data!\n")
   for (i in 1:length(choose_columns)) {
     cat(c(i, ": ", choose_columns[i], "\n"))
   }
