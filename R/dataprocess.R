@@ -123,6 +123,9 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   group <- paste0(geneName, "_group")
   dat2$group = ifelse(dat2[ , geneName] > median(dat2[ , names(exprSet)]), 'high', 'low')
   # dat2$group = ifelse(dat2[ , names(exprSet)] > quantile(dat2[ , names(exprSet)])[4], 'high', 'low')
+  # save the data
+  save(dat2, file = "kmplotdata.Rdata")
+  # plot the expression img
   dat2$geneName = dat2$HTRA1
   ggbetweenstats(data = dat2, x = group, y = geneName, xlab = "Patient group", ylab = paste0(geneName, "_expression"))
   # save the image
