@@ -59,9 +59,9 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
     }
   } else {
     if (! x_axis %in% choose_columns) {
-      cat("Sorry! The input of x_axis is not in the clinical dataset!\n***Please type right format!")
+      cat("Warning! The input of x_axis is not in the clinical dataset!\n***Please type right format!\n")
       x_axis = NULL
-      stop("Or you can eliminate x_axis and follow the tips.")
+      stop("Input again! Or you can eliminate x_axis and follow the tips.")
     }
   }
   # choose y_axis
@@ -86,9 +86,9 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
     stop("x_axis can't be the same with y_axis!")
   } else {
     if (! y_axis %in% choose_columns) {
-      cat("Sorry! The input of y_axis is not in the clinical dataset!\n***Please type right format!")
+      cat("Warning! The input of y_axis is not in the clinical dataset!\n***Please type right format!\n")
       x_axis = NULL
-      stop("Or you can eliminate y_axis and follow the tips.")
+      stop("Input again! Or you can eliminate y_axis and follow the tips.")
     }
   }
   
@@ -99,6 +99,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   dat2 <- cbind(dat1, exprSet[rownames(dat1), ])
   geneName <- names(exprSet)
   colnames(dat2)[3] <- geneName
+  # save the filtered data
   if(interactive()){
     repeat{
       ANSWER <- readline("Save the clinical data and related exprset data[y/n]: ")
@@ -124,6 +125,24 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   # dat2$group = ifelse(dat2[ , names(exprSet)] > quantile(dat2[ , names(exprSet)])[4], 'high', 'low')
   dat2$geneName = dat2$HTRA1
   ggbetweenstats(data = dat2, x = group, y = geneName, xlab = "Patient group", ylab = paste0(geneName, "_expression"))
+  # save the image
+  # if(interactive()){
+  #   repeat{
+  #     ANSWER <- readline("Save the expression picture?[y/n]: ")
+  #     num <- trimws(tolower(ANSWER), which = c("both", "left", "right"), whitespace = "[ \t\r\n]")
+  #     if (num == "y" || num == "yes") {
+  #       print("Save successfully!")
+  #       filename = paste0(geneName, "_clinical_expr_data_", Sys.Date(), ".pptx")
+  #       graph2ppt(file = filename, width = 7, height = 5)
+  #       break;
+  #     } else if (num == "n" || num == "no") {
+  #       break;
+  #     } else {
+  #       print("Wrong format! Please type y or n!")
+  #     }
+  #   }
+  # }
+  
 }
 
 sessionInfo()
