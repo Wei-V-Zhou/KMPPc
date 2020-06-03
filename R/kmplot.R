@@ -1,5 +1,5 @@
 #' kmplot
-#' 
+#'
 #' kmplot for TCGA
 #'
 #' By default, for this function you can draw the kmplot.
@@ -11,14 +11,16 @@
 #' @import survival survminer ggplot2 stringr
 #' @author Wei Zhou <247328181@@qq.com>
 #' @examples
+#' \dontrun{
 #' ## Plot the kmplot automatically
 #' kmplot()
-#' 
+#'
 #' ## Plot kmfit using "specified" style
 #' kmplot(plotType = "specified")
+#' }
 
 kmplot <- function(data = NULL, plotType = "typical") {
-  
+
   ## 0. prepare environment and load libraries
   # rm(list = ls())
   # gc()
@@ -35,7 +37,7 @@ kmplot <- function(data = NULL, plotType = "typical") {
   # }
   # installpkgs(pkgs)
   # lapply(pkgs, library, character.only = T)
-  
+
   ## 3. K-M plot analysis
   if (is.null(data)) {
     load("../data/kmplotdata.Rdata")
@@ -44,7 +46,7 @@ kmplot <- function(data = NULL, plotType = "typical") {
     print("Please guarantee your file is dat2!")
     cat("***Notation: Or you will load the kmplotdata.Rdata on your own!\n")
   }
-  
+
   # survival plot
   # choose the right status number
   factor <- names(table(dat2[ , 2]))
@@ -94,9 +96,9 @@ kmplot <- function(data = NULL, plotType = "typical") {
             legend.text = element_text(size = 12, face = "bold"))
     p <- ggsurvplot(kmfit, palette = c("red","blue"),
                     conf.int = F, pval = T, pval.method = T, surv.scale = "percent",
-                    xlab ="Months" , ylab = "% Disease-free", 
-                    ggtheme = g, risk.table = F, ncensor.plot = F) 
-    
+                    xlab ="Months" , ylab = "% Disease-free",
+                    ggtheme = g, risk.table = F, ncensor.plot = F)
+
     print(p)
   }
 

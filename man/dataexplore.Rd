@@ -23,11 +23,13 @@ dataexplore for TCGA
 By default, this function first input cancerType such as "BreastCancer" to explore the dataset whatever you like.
 }
 \examples{
+\dontrun{
 ## Explore the interested dataset by input the specified cancertype
 dataexplore(cancerType = "BreastCancer", dataType = "mrna")
 
 ## If you have interested datatype, you can input, such as mrna, CNA, mutation, etc
 dataexplore(cancerType = "BreastCancer", studyId = NULL, dataType = "mrna")
+}
 }
 \author{
 Wei Zhou <247328181@qq.com>

@@ -10,21 +10,20 @@ Description: KMPPc can easily draw kmplot for pan-cancer with specified research
     of signaling pathway, creating a possibly significant target gene.
 License: MIT License
 Imports:
+    cgdsr,
     ggplot2,
     ggstatsplot,
     stringr, 
     ggpubr, 
     survival, 
     survminer,
-    shiny,
-    cgdsr
+    shiny
 VignetteBuilder: knitr
 Suggests:
     knitr,
     rmarkdown
 Depends:
-    R(>= 3.6.3)
+    R(>= 3.6.1)
 biocViews: GeneExpression, Visualization, GUI
 RoxygenNote: 7.1.0
 Encoding: UTF-8
-LazyData: true

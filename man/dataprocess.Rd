@@ -25,11 +25,13 @@ dataprocess for TCGA
 By default, this function you can filter some dirty data to prepare for kmplot.
 }
 \examples{
+\dontrun{
 ## Plot the kmplot automatically
 kmplot()
 
 ## Plot kmfit using "specified" style
 kmplot(plotType = "specified")
+}
 }
 \author{
 Wei Zhou <247328181@qq.com>

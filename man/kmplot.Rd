@@ -21,11 +21,13 @@ kmplot for TCGA
 By default, for this function you can draw the kmplot.
 }
 \examples{
+\dontrun{
 ## Plot the kmplot automatically
 kmplot()
 
 ## Plot kmfit using "specified" style
 kmplot(plotType = "specified")
+}
 }
 \author{
 Wei Zhou <247328181@qq.com>
