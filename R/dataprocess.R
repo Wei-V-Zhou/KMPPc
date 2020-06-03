@@ -1,14 +1,34 @@
+#' dataprocess
+#' 
+#' dataprocess for TCGA
+#'
+#' By default, this function you can filter some dirty data to prepare for kmplot.
+#'
+#' @param clinicaldata The data can be loaded by the results of dataexplore. You can load("survival_inputdata.Rdata") to get both of datasets.
+#' @param exprSet The data can be loaded by the results of dataexplore. You can load("survival_inputdata.Rdata") to get both of datasets.
+#' @param x_axis This argument is the x axis for time.
+#' @param y_axis This argument is the y axis for status.
+#' @return There is a clean data after dataprocess.
+#' @export
+#' @import ggplot2 stringr ggpubr ggstatsplot
+#' @author Wei Zhou <247328181@@qq.com>
+#' @examples
+#' ## Plot the kmplot automatically
+#' kmplot()
+#' 
+#' ## Plot kmfit using "specified" style
+#' kmplot(plotType = "specified")
 
 dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_axis = NULL) {
   
   ## 0. prepare environment and load libraries
   # rm(list = ls())
   # gc()
-  set.seed(12345)
-  graphics.off()
-  options(stringsAsFactors = FALSE)
+  # set.seed(12345)
+  # graphics.off()
+  # options(stringsAsFactors = FALSE)
   # load packages
-  pkgs <- c("ggplot2", "stringr", "ggpubr", "ggstatsplot", "export")
+  # pkgs <- c("ggplot2", "stringr", "ggpubr", "ggstatsplot", "export")
   # installpkgs <- function(pkgs){
   #   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
   #   if (length(new.pkgs))
@@ -16,7 +36,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   #   sapply(pkgs, require, character.only = T)
   # }
   # installpkgs(pkgs)
-  lapply(pkgs, library, character.only = T)
+  # lapply(pkgs, library, character.only = T)
   
   ## 2. data preproceeding
   # load data
