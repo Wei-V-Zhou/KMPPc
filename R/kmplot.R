@@ -1,5 +1,7 @@
+rm(list = ls())
+gc()
 
-kmplot <- function(data = NULL) {
+kmplot <- function(data = NULL, plotType = Typical) {
   
   ## 0. prepare environment and load libraries
   # rm(list = ls())
@@ -21,24 +23,21 @@ kmplot <- function(data = NULL) {
   ## 3. K-M plot analysis
   if (is.null(data)) {
     load("kmplotdata.Rdata")
-    print("Your file is null!")
+    dat2 <<- dat2
   } else {
     print("Please guarantee your file is dat2!")
     cat("***Notation: Or you will load the kmplotdata.Rdata on your own!")
   }
   
   # survival plot
-  table(group)
-  my.surv <- Surv(dat2[ , 1], dat2[ , 2] == 'Recurred/Progressed')
-  kmfit <- survfit(my.surv~group, data = dat2)
-  print("Your file is null!!")
+  factor <- names(table(dat2[ , 2]))
+  my.surv <<- Surv(dat2[ , 1], dat2[ , 2] == 'Recurred/Progressed')
+  kmfit <<- survfit(my.surv~group, data = dat2)
   plot(kmfit, col = c("red", "blue"))
-  print("Your file is null!!!")
   img <- ggsurvplot(kmfit, palette = c("#E7B800","#2E9FDF"),
                     conf.int = TRUE, pval = TRUE, xlab = "Time / Month",
                     ggtheme = theme_light(), risk.table = TRUE, ncensor.plot = TRUE)
   print(img)
-  print("Your file is null!!!!")
   label <- data.frame(kmfit$strata)
   labs <- cbind(rownames(label), label)
   colnames(labs) <- c("gene_group", "n")
