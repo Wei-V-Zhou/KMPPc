@@ -1,15 +1,34 @@
+#' dataexplore
+#' 
+#' dataexplore for TCGA
+#'
+#' By default, this function first input cancerType such as "BreastCancer" to explore the dataset whatever you like.
+#'
+#' @param cancerType The cancertype you'd like to explore, including "BreastCancer", "PancreaticCancer", "Glioma"
+#' @param studyId This argument you can explore by yourself, because there is too many researches or database you can take advantage of.
+#' @param dataType It provides "mrna", "CNA", "mutation" for more information to dig.
+#' @return There is a RData file (survival_inputdata.Rdata) exported to the data folder.
+#' @export
+#' @import cgdsr
+#' @author Wei Zhou <247328181@@qq.com>
+#' @examples
+#' ## Explore the interested dataset by input the specified cancertype
+#' dataexplore(cancerType = "BreastCancer", dataType = "mrna")
+#' 
+#' ## If you have interested datatype, you can input, such as mrna, CNA, mutation, etc
+#' dataexplore(cancerType = "BreastCancer", studyId = NULL, dataType = "mrna")
 
 dataexplore <- function(cancerType, studyId = NULL, dataType = NULL) {
 
   ## 0. prepare environment and load libraries
   # rm(list = ls())
   # gc()
-  set.seed(12345)
-  graphics.off()
-  options(stringsAsFactors = FALSE)
+  # set.seed(12345)
+  # graphics.off()
+  # options(stringsAsFactors = FALSE)
   # load packages
-  pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival",
-            "survminer", "readxl", "ggstatsplot", "export")
+  # pkgs <- c("cgdsr", "ggplot2", "stringr", "ggpubr", "survival",
+  #           "survminer", "readxl", "ggstatsplot", "export")
   # installpkgs <- function(pkgs){
   #   new.pkgs <- pkgs[!(pkgs %in% installed.packages()[ , "Package"])]
   #   if (length(new.pkgs))
@@ -17,7 +36,7 @@ dataexplore <- function(cancerType, studyId = NULL, dataType = NULL) {
   #   sapply(pkgs, require, character.only = T)
   # }
   # installpkgs(pkgs)
-  lapply(pkgs, library, character.only = T)
+  # lapply(pkgs, library, character.only = T)
 
   ## 1. connect the TCGA database and obtain the data
   # create a CGDS connection objext

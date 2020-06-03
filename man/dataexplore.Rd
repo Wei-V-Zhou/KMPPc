@@ -24,9 +24,10 @@ explore the dataset whatever you like.
 }
 \examples{
 ## Explore the interested dataset by input the specified cancertype
-dataexplore(cancerType = "BreastCancer")
+   dataexplore(cancerType = "BreastCancer", dataType = "mrna")
+   
 ## If you have interested datatype, you can input, such as mrna, CNA, mutation, etc
-dataexplore(cancerType = "BreastCancer", dataType = "mrna")
+   dataexplore(cancerType = "BreastCancer", dataType = "mrna")
 }
 \references{
 Giuseppe Cardillo. (1993). Kmplot plot the kaplan-meier estimation of the survival function. Geotectonica Et Metallogenia.
