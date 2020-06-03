@@ -9,8 +9,7 @@ dataexplore(cancerType, studyId = NULL, dataType = NULL)
 \item{cancerType}{The cancertype you'd like to explore, including "BreastCancer",
 "PancreaticCancer", "Glioma"}
 
-\item{studyId}{This argument you can explore by yourself, because there is too
-many researches or database you can take advantage of}
+\item{studyId}{This argument you can explore by yourself, because there is too many researches or database you can take advantage of}
 
 \item{dataType}{It provides "mrna", "CNA", "mutation" for more information to dig.}
 }
