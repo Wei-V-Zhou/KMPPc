@@ -22,7 +22,7 @@ kmplot <- function(data = NULL, plotType = "typical") {
   
   ## 3. K-M plot analysis
   if (is.null(data)) {
-    load("kmplotdata.Rdata")
+    load("../data/kmplotdata.Rdata")
     dat2 <<- dat2
   } else {
     print("Please guarantee your file is dat2!")

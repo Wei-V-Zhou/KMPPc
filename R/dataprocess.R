@@ -21,7 +21,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   ## 2. data preproceeding
   # load data
   if (is.null(clinicaldata) || is.null(exprSet)) {
-    load("survival_inputdata.Rdata")
+    load("../data/survival_inputdata.Rdata")
   } else {
     print("Please guarantee your two files are choose_clinicaldata and exprSet, respectively!")
     cat("***Notation: Or you will load the survival_inputdata.Rdata on your own!")
@@ -124,7 +124,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
   dat2$group = ifelse(dat2[ , geneName] > median(dat2[ , names(exprSet)]), 'high', 'low')
   # dat2$group = ifelse(dat2[ , names(exprSet)] > quantile(dat2[ , names(exprSet)])[4], 'high', 'low')
   # save the data
-  save(dat2, file = "kmplotdata.Rdata")
+  save(dat2, file = "../data/kmplotdata.Rdata")
   # plot the expression img
   dat2$geneName = dat2$HTRA1
   ggbetweenstats(data = dat2, x = group, y = geneName, xlab = "Patient group", ylab = paste0(geneName, "_expression"))

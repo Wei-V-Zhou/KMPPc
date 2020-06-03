@@ -203,7 +203,7 @@ dataexplore <- function(cancerType, studyId = NULL, dataType = NULL) {
   # get clinical data for the case list
   myclinicaldata <- getClinicalData(mycgds, caseList)
   # save the data
-  save(exprSet, myclinicaldata, file="survival_inputdata.Rdata")
+  save(exprSet, myclinicaldata, file="../data/survival_inputdata.Rdata")
 }
 
 
