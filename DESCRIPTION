@@ -22,10 +22,11 @@ Imports:
     plyr
 VignetteBuilder: knitr
 Suggests:
-    knitr
+    knitr,
+    rmarkdown
 Depends:
     R(>= 3.6.3)
 biocViews: GeneExpression, Visualization, GUI
-RoxygenNote: 6.1.1
+RoxygenNote: 7.1.0
 Encoding: UTF-8
 LazyData: true
