@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1591185040983.000,
+    "dirty" : false,
+    "encoding" : "CP936",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "E27FFD3E",
+    "lastKnownWriteTime" : 1591185089,
+    "last_content_update" : 1591185089601,
+    "path" : "H:/Rdata/KMPPc/R/dataexplore.R",
+    "project_path" : "R/dataexplore.R",
+    "properties" : {
+        "cursorPosition" : "11,35",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
