@@ -170,7 +170,7 @@ dataprocess <- function(clinicaldata = NULL, exprSet = NULL, x_axis = NULL, y_ax
 
 }
 
-sessionInfo()
+# sessionInfo()
 # R version 3.6.3 (2020-02-29)
 # Platform: x86_64-w64-mingw32/x64 (64-bit)
 # Running under: Windows 10 x64 (build 18363)
