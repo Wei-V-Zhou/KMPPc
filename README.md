@@ -12,3 +12,5 @@ install.packages("devtools")
 library("devtools")
 install_github("Wei-V-Zhou/KMPPc")
 ```
+
+![Image text](https://github.com/Wei-V-Zhou/KMPPc/blob/master/360%E6%88%AA%E5%9B%BE20200726175511695.jpg)
